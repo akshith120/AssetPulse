@@ -4,18 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastAPI Factory Dashboard</title>
-    <script src="https://tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 30%),
+                radial-gradient(circle at top right, rgba(16, 185, 129, 0.14), transparent 28%),
+                linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(14px);
+            background: rgba(255, 255, 255, 0.82);
+        }
+
+        .shadow-soft {
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
     <div class="max-w-5xl mx-auto py-10 px-4">
         <!-- Dashboard Header -->
-        <div class="mb-8 border-b border-gray-200 pb-5 flex items-center justify-between">
+        <div class="mb-8 border-b border-gray-200 pb-5 flex items-center justify-between gap-4 flex-col md:flex-row">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Industrial Asset Monitor</h1>
-                <p class="text-gray-500 mt-1">Real-time factory floor inventory powered by FastAPI backend engines.</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-600 mb-2">AssetPulse</p>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Industrial Asset Monitor</h1>
+                <p class="text-gray-500 mt-2 max-w-2xl">Real-time factory floor inventory powered by FastAPI backend engines.</p>
             </div>
             <button onclick="document.getElementById('add-item-modal').classList.remove('hidden')"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2.5 rounded shadow-sm transition">
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm transition self-start md:self-auto">
                 + Add New Item
             </button>
         </div>
@@ -30,7 +52,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {% for item, details in inventory.items() %}
             {% set is_low = details.quantity < details.min_required %}
-            <div class="bg-white p-6 rounded-lg shadow-sm border {{ 'border-red-400 bg-red-50' if is_low else 'border-gray-200' }}">
+            <div class="glass-panel shadow-soft p-6 rounded-2xl border {{ 'border-red-400 bg-red-50' if is_low else 'border-white/60' }}">
                 <div class="flex justify-between items-start">
                     <div>
                         <h2 class="text-xl font-semibold text-gray-800">{{ item }}</h2>
@@ -49,8 +71,8 @@
                 </div>
 
                 <!-- Numerical Count Display -->
-                <div class="mt-4">
-                    <span class="text-4xl font-extrabold text-gray-900">{{ details.quantity }}</span>
+                <div class="mt-5 flex items-end gap-2">
+                    <span class="text-5xl font-extrabold text-gray-900 leading-none">{{ details.quantity }}</span>
                     <span class="text-gray-500 text-sm ml-1">units remaining</span>
                 </div>
 
@@ -78,7 +100,7 @@
         </div>
 
         {% if not inventory %}
-        <div class="text-center text-gray-500 py-16 border border-dashed border-gray-300 rounded-lg">
+        <div class="text-center text-gray-500 py-16 border border-dashed border-gray-300 rounded-2xl bg-white/70 shadow-soft">
             No inventory items yet. Click "+ Add New Item" to get started.
         </div>
         {% endif %}
@@ -86,7 +108,7 @@
 
     <!-- Add New Item Modal -->
     <div id="add-item-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center px-4 z-50">
-        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+        <div class="glass-panel rounded-2xl shadow-soft max-w-md w-full p-6 border border-white/70">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Add New Inventory Item</h3>
                 <button onclick="document.getElementById('add-item-modal').classList.add('hidden')"
